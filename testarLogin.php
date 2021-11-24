@@ -1,35 +1,42 @@
 <?php
     session_start();
-
-    if (isset($_POST['submit']) && !empty($_POST['email']) && !empty($_POST['senha'])) {
-        # Acessar
+    // print_r($_REQUEST);
+    if(isset($_POST['submit']) && !empty($_POST['email']) && !empty($_POST['senha']))
+    {
+        // Acessar
         include_once('config.php');
-
         $email = $_POST['email'];
         $senha = $_POST['senha'];
 
-        print_r('Email: ' . $email);
-        print_r('<br>');
-        print_r('Senha: ' . $senha);
+        // print_r('Email: ' . $email);
+        // print_r('<br>');
+        // print_r('Senha: ' . $senha);
 
-        // $SQL = "SELECT * FROM usuarios WHERE email = '$email' AND senha = '$senha'";
+        $sql = "SELECT * FROM usuarios WHERE email = '$email' and senha = '$senha'";
 
-        // $result = $conexao->query($SQL);
+        $result = $conexao->query($sql);
 
-        // if (mysqli_num_rows($result)) {
-        //     # code...
-        //     unset($_SESSION['email']);
-        //     unset($_SESSION['senha']);
+        // print_r($sql);
+        // print_r($result);
 
-        //     header('Location: login.php');
-
-        // } else {
-        //     $_SESSION['email'] = $email;
-        //     $_SESSION['senha'] = $senha;
-
-        //     header('Location: sistema.php');
-        // }
-    } else {
+        if(mysqli_num_rows($result) < 1)
+        {
+            // print_r("Não existe");
+            unset($_SESSION['email']);
+            unset($_SESSION['senha']);
+            header('Location: login.php');
+        }
+        else
+        {
+            // print_r("Existe");
+            $_SESSION['email'] = $email;
+            $_SESSION['senha'] = $senha;
+            header('Location: sistema.php');
+        }
+    }
+    else
+    {
+        // Não acessar
         header('Location: login.php');
     }
 ?>
